@@ -1,45 +1,24 @@
 package controller;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-import connection.LibraryConnection;
+import dataAccess.BookDao;
 import book.Book;
-import library.Library;
 
-public class LibraryAppController implements LibraryAppInterface{
+public class LibraryAppController {
 
 	Scanner scanner = new Scanner(System.in);
 	Book book = new Book();
-	Library library = new Library();
+	BookDao library = new BookDao();
 	
-	public boolean checkISBN(String isbn) throws SQLException {
-		boolean equal = false;
-		Connection connection = LibraryConnection.createConnection();
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery("select isbn from book");
-		while (resultSet.next()) {
-			if (isbn.equals(resultSet.getString("isbn"))) {
-				equal = true;
-				break;
-			} else
-				equal = false;
-		}
-
-		statement.close();
-		LibraryConnection.closeConnection(connection);
-		return equal;
-	}
-
 	public void firstChoice() throws SQLException{
 	
 		boolean done = false;
 		while (!done) {
 			System.out.println("Enter book isbn:");
 			String isbn = scanner.next();
-			boolean isbnExist = checkISBN(isbn);
+			boolean isbnExist = library.checkISBN(isbn);
 			if (!isbnExist) {
 				System.out.println("Enter book title:");
 				String title = scanner.next();
@@ -57,13 +36,25 @@ public class LibraryAppController implements LibraryAppInterface{
 		}
 	}
 	
+	public void secondChoice() throws SQLException {
+		ArrayList<Book> bookList = library.listRegisterBooks();
+		System.out.println("ID " + " \t " + "ISBN " + " \t    "
+				+ "Title");
+		for (Book someBook : bookList)
+			System.out.println(someBook.getBookID() + " \t "
+					+ someBook.getBookISBN() + " \t    "
+					+ someBook.getBookTitle());
+		System.out.println("\n");
+		
+	}
+	
 	public void thirdChoice() throws SQLException{
 		boolean done = false;
 		while (!done) {
 			System.out
 					.println("Enter isbn of the book you want to update:");
 			String isbn = scanner.next();
-			boolean isbnExist = checkISBN(isbn);
+			boolean isbnExist = library.checkISBN(isbn);
 			if (!isbnExist) {
 				System.out
 						.println("Book with that isbn doesn`t exist in library!");
@@ -85,7 +76,7 @@ public class LibraryAppController implements LibraryAppInterface{
 			System.out
 					.println("Enter isbn of the book you want to unregister:");
 			String isbn = scanner.next();
-			boolean isbnExist = checkISBN(isbn);
+			boolean isbnExist = library.checkISBN(isbn);
 			if (!isbnExist) {
 				System.out
 						.println("Book with that isbn doesn`t exist in library!");
@@ -97,4 +88,6 @@ public class LibraryAppController implements LibraryAppInterface{
 			}
 		}
 	}
+
+	
 }

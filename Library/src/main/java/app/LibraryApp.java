@@ -1,10 +1,7 @@
 package app;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import library.BookPrinter;
-import book.Book;
 import controller.LibraryAppController;
 
 public class LibraryApp {
@@ -23,14 +20,7 @@ public class LibraryApp {
 				controller.firstChoice();
 				break;
 			case "2":
-				ArrayList<Book> bookList = BookPrinter.listRegisterBooks();
-				System.out.println("ID " + " \t " + "ISBN " + " \t    "
-						+ "Title");
-				for (Book someBook : bookList)
-					System.out.println(someBook.getBookID() + " \t "
-							+ someBook.getBookISBN() + " \t    "
-							+ someBook.getBookTitle());
-				System.out.println("\n");
+				controller.secondChoice();
 				break;
 			case "3":
 				controller.thirdChoice();
