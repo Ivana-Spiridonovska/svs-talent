@@ -52,7 +52,6 @@ public class BookDao implements BookDaoInterface {
 
 	}
 
-	@Override
 	public boolean checkISBN(String isbn) throws SQLException {
 		boolean equal = false;
 		Connection connection = LibraryConnection.createConnection();
@@ -73,7 +72,6 @@ public class BookDao implements BookDaoInterface {
 		return equal;
 	}
 
-	@Override
 	public ArrayList<Book> listRegisterBooks() throws SQLException {
 		ArrayList<Book> listOfBooks = new ArrayList<Book>();
 		Book book;

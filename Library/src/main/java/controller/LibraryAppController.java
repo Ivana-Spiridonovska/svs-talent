@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dataAccess.BookDao;
+import dataAccess.BookDaoHibernate;
 import book.Book;
 
 public class LibraryAppController {
 
 	Scanner scanner = new Scanner(System.in);
 	Book book = new Book();
-	BookDao library = new BookDao();
+	BookDaoHibernate library = new BookDaoHibernate();
 	
 	public void firstChoice() throws SQLException{
 	
@@ -45,7 +46,6 @@ public class LibraryAppController {
 					+ someBook.getBookISBN() + " \t    "
 					+ someBook.getBookTitle());
 		System.out.println("\n");
-		
 	}
 	
 	public void thirdChoice() throws SQLException{

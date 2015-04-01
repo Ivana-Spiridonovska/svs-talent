@@ -1,9 +1,17 @@
 package book;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "book")
 public class Book {
-	private int id;
-	private String isbn;
-	private String title;
+	@Id @GeneratedValue private int id;
+    @Column(unique = true) private String isbn;
+    @Column(name = "title") private String title;
 	
 	public Book(){
 		

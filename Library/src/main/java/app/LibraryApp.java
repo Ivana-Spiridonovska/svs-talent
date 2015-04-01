@@ -2,6 +2,7 @@ package app;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import configuration.LibraryConfiguration;
 import controller.LibraryAppController;
 
 public class LibraryApp {
@@ -10,6 +11,7 @@ public class LibraryApp {
 		System.out.println("Welcome to Library!\n");
 		Scanner scanner = new Scanner(System.in);
 		boolean finished = false;
+		LibraryConfiguration.createSessionFactory();
 		LibraryAppController controller = new LibraryAppController();
 
 		while (!finished) {
@@ -40,6 +42,7 @@ public class LibraryApp {
 				break;
 			}
 		}
+		LibraryConfiguration.closeSessionFactory();
 
 	}
 
