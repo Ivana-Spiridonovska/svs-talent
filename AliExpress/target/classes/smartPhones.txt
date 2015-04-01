@@ -1,0 +1,5 @@
+aa|Sony Xperia|15000|5
+ab|HTC 300|10000|10
+ac|Iphone 5|25000|8
+ad|Samsung S5|20000|15
+ae|Samsung S6|30000|12
