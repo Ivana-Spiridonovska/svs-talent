@@ -1,4 +1,5 @@
 package warehouse;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,7 +13,7 @@ public class WarehouseInMemory implements WarehouseInterface {
 	private Vector<Product> products;
 
 	public WarehouseInMemory() {
-		
+
 	}
 
 	public Vector<Product> getProducts() {
@@ -20,40 +21,43 @@ public class WarehouseInMemory implements WarehouseInterface {
 	}
 
 	@Override
-	public boolean containsProductWithKey(String key) {
-		boolean isInWarehouse = false;
+	public Product getProductWithKey(String key) {
+		Product productWithKey = null;
 
 		for (Product product : products) {
 			if (product.getUniqueKey().equals(key)) {
-				isInWarehouse = true;
+				productWithKey = product;
 				break;
 			}
 		}
-		return isInWarehouse;
+		return productWithKey;
+
 	}
 
 	@Override
-	public Product update(String productKey, int quantityRequestedByBuyer)
+	public Product getBoughtProduct(String productKey, int quantityRequestedByBuyer)
 			throws QuantityException {
 
 		Product soldProduct = null;
+		Product productWithKey = getProductWithKey(productKey);
 
-		for (Product product : products) {
-			if (product.getUniqueKey().equals(productKey)) {
-
-				if (product.getQuantity() - quantityRequestedByBuyer < 0) {
-					throw new QuantityException(
-							"Not enough products in the store!");
-				} else {
-					product.setQuantity(product.getQuantity()
-							- quantityRequestedByBuyer);
-				}
-				soldProduct = new Product(product.getUniqueKey(),
-						product.getName(), product.getPrice(),
-						quantityRequestedByBuyer);
-			}
+		if (productWithKey.getQuantity() - quantityRequestedByBuyer < 0) {
+			throw new QuantityException("Not enough products in the store!");
+		} else {
+			soldProduct = new Product(productWithKey.getUniqueKey(),
+					productWithKey.getName(), productWithKey.getPrice(),
+					quantityRequestedByBuyer);
 		}
+
 		return soldProduct;
+	}
+
+	@Override
+	public void update(Product boughtProduct) {
+		Product productWithKey = getProductWithKey(boughtProduct.getUniqueKey());
+		productWithKey.setQuantity(productWithKey.getQuantity()
+				- boughtProduct.getQuantity());
+
 	}
 
 	@Override
@@ -62,7 +66,8 @@ public class WarehouseInMemory implements WarehouseInterface {
 		BufferedReader buff = null;
 
 		try {
-			FileReader file = new FileReader("./src/main/resources/smartPhones.txt");
+			FileReader file = new FileReader(
+					"./src/main/resources/smartPhones.txt");
 			buff = new BufferedReader(file);
 
 			boolean eof = false;

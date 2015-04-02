@@ -42,59 +42,59 @@ public class WarehouseJdbc implements WarehouseInterface {
 	}
 
 	@Override
-	public boolean containsProductWithKey(String key) throws SQLException {
-		boolean productInWarehouse = false;
-		Connection connection = AliExpressConnection.createConnection();
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select count(*) from product where key =?");
-		preparedStatement.setString(1, key);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		if (resultSet.next()) {
-			if (resultSet.getInt(1) == 0) {
-				productInWarehouse = false;
-			} else
-				productInWarehouse = true;
-		}
-
-		preparedStatement.close();
-		AliExpressConnection.closeConnection(connection);
-		return productInWarehouse;
-	}
-
-	@Override
-	public Product update(String productKey, int quantityRequestedByBuyer)
-			throws QuantityException, SQLException {
-
-		Product soldProduct = null;
+	public Product getProductWithKey(String key) throws SQLException {
+		Product productWithKey = null;
 
 		Connection connection = AliExpressConnection.createConnection();
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("select * from product where key =?");
-		preparedStatement.setString(1, productKey);
+		preparedStatement.setString(1, key);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
+			String uniqueKey = resultSet.getString("key");
+			String name = resultSet.getString("name");
+			int price = resultSet.getInt("price");
 			int quantity = resultSet.getInt("quantity");
-			if (quantity - quantityRequestedByBuyer < 0) {
-				throw new QuantityException("Not enough products in the store!");
-			} else {
-				PreparedStatement preparedStatement1 = connection
-						.prepareStatement("update product set quantity=? where key=? ");
 
-				preparedStatement1.setInt(1, quantity
-						- quantityRequestedByBuyer);
-				preparedStatement1.setString(2, resultSet.getString("key"));
-				preparedStatement1.executeUpdate();
-				preparedStatement1.close();
-			}
-			soldProduct = new Product(resultSet.getString("key"),
-					resultSet.getString("name"), resultSet.getInt("price"),
+			productWithKey = new Product(uniqueKey, name, price, quantity);
+		}
+
+		return productWithKey;
+	}
+
+	@Override
+	public Product getBoughtProduct(String productKey, int quantityRequestedByBuyer)
+			throws QuantityException, SQLException {
+
+		Product soldProduct = null;
+
+		Product productWithKey = getProductWithKey(productKey);
+
+		if (productWithKey.getQuantity() - quantityRequestedByBuyer < 0) {
+			throw new QuantityException("Not enough products in the store!");
+		} else {
+			soldProduct = new Product(productWithKey.getUniqueKey(),
+					productWithKey.getName(), productWithKey.getPrice(),
 					quantityRequestedByBuyer);
 		}
 
+		return soldProduct;
+	}
+
+	@Override
+	public void update(Product boughtProduct) throws SQLException {
+		Product product = getProductWithKey(boughtProduct.getUniqueKey());
+		Connection connection = AliExpressConnection.createConnection();
+		PreparedStatement preparedStatement = connection
+				.prepareStatement("update product set quantity=? where key=? ");
+
+		preparedStatement.setInt(1,
+				product.getQuantity() - boughtProduct.getQuantity());
+		preparedStatement.setString(2, boughtProduct.getUniqueKey());
+		preparedStatement.executeUpdate();
 		preparedStatement.close();
 		AliExpressConnection.closeConnection(connection);
 
-		return soldProduct;
 	}
 
 	@Override

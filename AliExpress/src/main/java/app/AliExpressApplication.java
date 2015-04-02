@@ -9,7 +9,7 @@ import shoppingBasket.ShoppingBasket;
 import warehouse.QuantityException;
 import warehouse.WarehouseInMemory;
 import warehouse.WarehouseInterface;
-import warehouse.WarehouseIsEmpty;
+import warehouse.CheckWarehouseJdbc;
 import warehouse.WarehouseJdbc;
 
 public class AliExpressApplication {
@@ -84,7 +84,8 @@ public class AliExpressApplication {
 				break;
 			case 2:
 				warehouse = new WarehouseJdbc();
-				WarehouseIsEmpty.check((WarehouseJdbc) warehouse);
+				if(CheckWarehouseJdbc.isEmpty((WarehouseJdbc) warehouse))
+					warehouse.storeData();
 				done = true;
 				break;
 			default:
@@ -103,11 +104,12 @@ public class AliExpressApplication {
 			String key = userChoice.next();
 			int quantity = 0;
 
-			if (warehouse.containsProductWithKey(key)) {
+			if (warehouse.getProductWithKey(key)!=null) {
 				System.out.println("Enter quantity:");
 				quantity = userChoice.nextInt();
 				try {
-					Product boughtProduct = warehouse.update(key, quantity);
+					Product boughtProduct = warehouse.getBoughtProduct(key, quantity);
+					warehouse.update(boughtProduct);
 					shoppingBasket.addProduct(boughtProduct);
 				} catch (QuantityException qe) {
 					qe.printMessage();

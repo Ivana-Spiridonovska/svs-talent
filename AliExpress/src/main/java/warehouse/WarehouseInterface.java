@@ -6,8 +6,9 @@ import product.Product;
 
 public interface WarehouseInterface {
 
-	public boolean containsProductWithKey(String key) throws SQLException;
-	public Product update(String key, int quantity) throws QuantityException, SQLException;
+	public Product getBoughtProduct(String key, int quantity) throws QuantityException, SQLException;
 	public void storeData() throws SQLException;
+	public void update(Product product) throws SQLException;
+	public Product getProductWithKey(String key) throws SQLException;
 
 }

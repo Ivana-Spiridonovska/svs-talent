@@ -7,19 +7,22 @@ import java.sql.SQLException;
 
 import connection.AliExpressConnection;
 
-public class WarehouseIsEmpty {
-	public static void check(WarehouseJdbc warehouseJdbc) throws SQLException {
+public class CheckWarehouseJdbc {
+	
+	public static boolean isEmpty(WarehouseJdbc warehouseJdbc) throws SQLException {
+		boolean empty=false;
 		Connection connection = AliExpressConnection.createConnection();
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("select count(*) from product");
 		ResultSet resultSet = preparedStatement.executeQuery();
 		if (resultSet.next()) {
 			if (resultSet.getInt(1) == 0) {
-				warehouseJdbc.storeData();
+				empty = true;
 			}
 		}
 		preparedStatement.close();
 		AliExpressConnection.closeConnection(connection);
+		return empty;
 	}
 
 }
