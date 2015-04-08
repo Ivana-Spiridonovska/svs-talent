@@ -1,18 +1,18 @@
 package shoppingBasket;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import product.Product;
 
 public class ShoppingBasket {
 
-	Vector<Product> basket = new Vector<Product>();
+	ArrayList<Product> basket = new ArrayList<Product>();
 
 	public ShoppingBasket() {
 
 	}
 
-	public Vector<Product> getProductBasket() {
+	public ArrayList<Product> getProductBasket() {
 		return this.basket;
 	}
 

@@ -1,6 +1,6 @@
 package printer;
 import java.sql.SQLException;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import app.AliExpressApplication;
 import product.Product;
@@ -8,16 +8,22 @@ import shoppingBasket.ShoppingBasket;
 import warehouse.WarehouseInMemory;
 import warehouse.WarehouseInterface;
 import warehouse.WarehouseJdbc;
+import warehouse.WarehouseHibernate;
 
 public class Printer {
 
 	public static void print(WarehouseInterface warehouse) throws SQLException {
-		Vector<Product> products = null;
-		if (AliExpressApplication.whichWarehouse == 1){
+		ArrayList<Product> products = null;
+		switch (AliExpressApplication.whichWarehouse) {
+		case "1":
 			products = ((WarehouseInMemory) warehouse).getProducts();
-		}
-		else{
+			break;
+		case "2":
 			products = ((WarehouseJdbc) warehouse).getProducts();
+			break;
+		case "3":
+			products = ((WarehouseHibernate) warehouse).getProducts();
+			break;
 		}
 		System.out.printf("%s %10s %15s %n", "Key", " Name ", " Price");
 		for (Product product : products) {
@@ -27,7 +33,7 @@ public class Printer {
 	}
 	
 	public static void printBasket(ShoppingBasket basket) {
-		Vector<Product> shoppingBasket = basket.getProductBasket();
+		ArrayList<Product> shoppingBasket = basket.getProductBasket();
 		if (shoppingBasket.isEmpty()) {
 			System.out.println("Your basket is empty! \n");
 		} else {

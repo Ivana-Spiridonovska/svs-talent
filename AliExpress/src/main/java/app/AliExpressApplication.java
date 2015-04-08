@@ -3,17 +3,18 @@ package app;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import configuration.AliExpressConfiguration;
 import printer.Printer;
 import product.Product;
 import shoppingBasket.ShoppingBasket;
-import warehouse.QuantityException;
+import warehouse.WarehouseHibernate;
 import warehouse.WarehouseInMemory;
 import warehouse.WarehouseInterface;
 import warehouse.CheckWarehouseJdbc;
 import warehouse.WarehouseJdbc;
 
 public class AliExpressApplication {
-	public static int whichWarehouse;
+	public static String whichWarehouse;
 	private static WarehouseInterface warehouse;
 	private static Scanner userChoice = new Scanner(System.in);
 	private static ShoppingBasket shoppingBasket;
@@ -21,6 +22,7 @@ public class AliExpressApplication {
 	public static void main(String[] args) throws SQLException {
 		System.out.println("=====>AliExpress<===== \n");
 		shoppingBasket = new ShoppingBasket();
+		AliExpressConfiguration.createSessionFactory();
 		chooseWarehouse();
 
 		boolean finished = false;
@@ -38,7 +40,7 @@ public class AliExpressApplication {
 				break;
 
 			case "2":
-				secondOption();
+				addProductOption();
 				break;
 
 			case "3":
@@ -58,6 +60,7 @@ public class AliExpressApplication {
 			}
 		}
 
+		AliExpressConfiguration.closeSessionFactory();
 	}
 
 	public static void showMenu() {
@@ -72,20 +75,28 @@ public class AliExpressApplication {
 		boolean done = false;
 		while (!done) {
 			System.out.println("Choose which warehouse do you want to use? ");
-			System.out
-					.println("For in-memory warehouse enter 1, for database enter 2.");
+			System.out.println("1. In-memory warehouse");
+			System.out.println("2. Warehouse with JDBC");
+			System.out.println("3. Warehouse with Hibernate");
 			Scanner choice = new Scanner(System.in);
-			whichWarehouse = choice.nextInt();
+			whichWarehouse = choice.next();
 			switch (whichWarehouse) {
-			case 1:
+			case "1":
 				warehouse = new WarehouseInMemory();
 				warehouse.storeData();
 				done = true;
 				break;
-			case 2:
+			case "2":
 				warehouse = new WarehouseJdbc();
-				if(CheckWarehouseJdbc.isEmpty((WarehouseJdbc) warehouse))
+				if (CheckWarehouseJdbc.isEmpty((WarehouseJdbc) warehouse)) {
 					warehouse.storeData();
+				}
+				done = true;
+				break;
+			case "3":
+				warehouse = new WarehouseHibernate();
+				warehouse.storeData();
+
 				done = true;
 				break;
 			default:
@@ -96,29 +107,41 @@ public class AliExpressApplication {
 
 	}
 
-	public static void secondOption() throws SQLException {
+	public static void addProductOption() throws SQLException {
 		boolean moreProducts = true;
+
 		while (moreProducts) {
 
 			System.out.println("Enter product unique key:");
 			String key = userChoice.next();
-			int quantity = 0;
-
-			if (warehouse.getProductWithKey(key)!=null) {
+			int quantity;
+			Product product = warehouse.getProductWithKey(key);
+		
+			if (product != null) {
 				System.out.println("Enter quantity:");
 				quantity = userChoice.nextInt();
+
 				try {
-					Product boughtProduct = warehouse.getBoughtProduct(key, quantity);
-					warehouse.update(boughtProduct);
-					shoppingBasket.addProduct(boughtProduct);
+					if (product.getQuantity() - quantity < 0) {
+						throw new QuantityException(
+								"Not enough products in the store!");
+					} else {
+						Product product2 = new Product();
+						product2.setUniqueKey(key);
+						product2.setName(product.getName());
+						product2.setPrice(product.getPrice());
+						product2.setQuantity(quantity);
+						shoppingBasket.addProduct(product2);
+						product.setQuantity(product.getQuantity() - quantity);
+						warehouse.update(product);
+					}
 				} catch (QuantityException qe) {
 					qe.printMessage();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			} else {
-				System.out.println("Product with key - " + key
-						+ " doesn`t exist in the store!");
+				System.out.println("Product with key - " + key	+ " doesn`t exist in the store!");
 				continue;
 			}
 			System.out.println("Continue shopping? Yes/No");

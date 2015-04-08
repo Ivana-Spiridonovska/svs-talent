@@ -9,21 +9,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import product.Product;
 import connection.AliExpressConnection;
 
 public class WarehouseJdbc implements WarehouseInterface {
-	private Vector<Product> products;
+	private  ArrayList<Product> products;
 
 	public WarehouseJdbc() {
 
 	}
 
-	public Vector<Product> getProducts() throws SQLException {
+	public  ArrayList<Product> getProducts() throws SQLException {
 		Product product;
-		products = new Vector<Product>();
+		products = new  ArrayList<Product>();
 		Connection connection = AliExpressConnection.createConnection();
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery("select * from product");
@@ -63,33 +63,12 @@ public class WarehouseJdbc implements WarehouseInterface {
 	}
 
 	@Override
-	public Product getBoughtProduct(String productKey, int quantityRequestedByBuyer)
-			throws QuantityException, SQLException {
-
-		Product soldProduct = null;
-
-		Product productWithKey = getProductWithKey(productKey);
-
-		if (productWithKey.getQuantity() - quantityRequestedByBuyer < 0) {
-			throw new QuantityException("Not enough products in the store!");
-		} else {
-			soldProduct = new Product(productWithKey.getUniqueKey(),
-					productWithKey.getName(), productWithKey.getPrice(),
-					quantityRequestedByBuyer);
-		}
-
-		return soldProduct;
-	}
-
-	@Override
 	public void update(Product boughtProduct) throws SQLException {
-		Product product = getProductWithKey(boughtProduct.getUniqueKey());
 		Connection connection = AliExpressConnection.createConnection();
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("update product set quantity=? where key=? ");
 
-		preparedStatement.setInt(1,
-				product.getQuantity() - boughtProduct.getQuantity());
+		preparedStatement.setInt(1, boughtProduct.getQuantity());
 		preparedStatement.setString(2, boughtProduct.getUniqueKey());
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
@@ -99,7 +78,7 @@ public class WarehouseJdbc implements WarehouseInterface {
 
 	@Override
 	public void storeData() throws SQLException {
-		products = new Vector<Product>();
+		products = new  ArrayList<Product>();
 		BufferedReader buff = null;
 
 		try {

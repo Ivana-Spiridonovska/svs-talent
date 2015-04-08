@@ -1,10 +1,23 @@
 package product;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "product")
 public class Product {
 
-	private String uniqueKey;
-	private String name;
-	private int price;
-	private int quantity;
+	@Id
+	@Column(unique = true,name = "key") private String uniqueKey;
+	@Column(name = "name") private String name;
+	@Column(name = "price") private int price;
+	@Column(name = "quantity") private int quantity;
+	
+	public Product(){
+		
+	}
 
 	public Product(String uniqueKey, String name, int price, int quantity) {
 		this.uniqueKey = uniqueKey;

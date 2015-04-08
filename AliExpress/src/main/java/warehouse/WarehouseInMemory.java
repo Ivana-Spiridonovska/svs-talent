@@ -4,19 +4,19 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import product.Product;
 
 public class WarehouseInMemory implements WarehouseInterface {
 
-	private Vector<Product> products;
+	private  ArrayList<Product> products;
 
 	public WarehouseInMemory() {
 
 	}
 
-	public Vector<Product> getProducts() {
+	public ArrayList<Product> getProducts() {
 		return this.products;
 	}
 
@@ -35,34 +35,14 @@ public class WarehouseInMemory implements WarehouseInterface {
 	}
 
 	@Override
-	public Product getBoughtProduct(String productKey, int quantityRequestedByBuyer)
-			throws QuantityException {
-
-		Product soldProduct = null;
-		Product productWithKey = getProductWithKey(productKey);
-
-		if (productWithKey.getQuantity() - quantityRequestedByBuyer < 0) {
-			throw new QuantityException("Not enough products in the store!");
-		} else {
-			soldProduct = new Product(productWithKey.getUniqueKey(),
-					productWithKey.getName(), productWithKey.getPrice(),
-					quantityRequestedByBuyer);
-		}
-
-		return soldProduct;
-	}
-
-	@Override
 	public void update(Product boughtProduct) {
 		Product productWithKey = getProductWithKey(boughtProduct.getUniqueKey());
-		productWithKey.setQuantity(productWithKey.getQuantity()
-				- boughtProduct.getQuantity());
-
+		productWithKey.setQuantity(boughtProduct.getQuantity());
 	}
 
 	@Override
 	public void storeData() {
-		products = new Vector<Product>();
+		products = new  ArrayList<Product>();
 		BufferedReader buff = null;
 
 		try {
