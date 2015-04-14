@@ -2,19 +2,16 @@ package printer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import app.AliExpressApplication;
-import product.Product;
+import pojoObjects.Product;
 import shoppingBasket.ShoppingBasket;
-import warehouse.WarehouseInMemory;
 import warehouse.WarehouseInterface;
-import warehouse.WarehouseJdbc;
-import warehouse.WarehouseHibernate;
+import warehouse.WarehouseHibernateDao;
 
 public class Printer {
 
 	public static void print(WarehouseInterface warehouse) throws SQLException {
 		ArrayList<Product> products = null;
-		switch (AliExpressApplication.whichWarehouse) {
+		/*switch (AliExpressApplication.whichWarehouse) {
 		case "1":
 			products = ((WarehouseInMemory) warehouse).getProducts();
 			break;
@@ -24,7 +21,8 @@ public class Printer {
 		case "3":
 			products = ((WarehouseHibernate) warehouse).getProducts();
 			break;
-		}
+		}*/
+		products = ((WarehouseHibernateDao) warehouse).getProducts();
 		System.out.printf("%s %10s %15s %n", "Key", " Name ", " Price");
 		for (Product product : products) {
 			System.out.println(product.getUniqueKey() + " \t "

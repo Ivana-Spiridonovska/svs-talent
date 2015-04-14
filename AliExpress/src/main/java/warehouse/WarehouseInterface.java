@@ -2,7 +2,7 @@ package warehouse;
 
 import java.sql.SQLException;
 
-import product.Product;
+import pojoObjects.Product;
 
 public interface WarehouseInterface {
 

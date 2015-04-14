@@ -1,8 +1,13 @@
-package product;
+package pojoObjects;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -10,11 +15,17 @@ import javax.persistence.Table;
 public class Product {
 
 	@Id
+	@GeneratedValue
+	@Column(name = "id") private int id;
 	@Column(unique = true,name = "key") private String uniqueKey;
 	@Column(name = "name") private String name;
 	@Column(name = "price") private int price;
 	@Column(name = "quantity") private int quantity;
 	
+    @ManyToMany(mappedBy = "products", cascade = {CascadeType.ALL})
+    private Set<PurchaseOrder> orders;
+
+    
 	public Product(){
 		
 	}
@@ -57,4 +68,21 @@ public class Product {
 	public int getQuantity() {
 		return this.quantity;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Set<PurchaseOrder> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Set<PurchaseOrder> orders) {
+		this.orders = orders;
+	}
+	
 }

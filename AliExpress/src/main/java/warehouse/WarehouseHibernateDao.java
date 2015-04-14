@@ -16,9 +16,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import configuration.AliExpressConfiguration;
-import product.Product;
+import pojoObjects.Product;
 
-public class WarehouseHibernate  implements WarehouseInterface{
+public class WarehouseHibernateDao  implements WarehouseInterface{
 	private ArrayList<Product> products;
 
 	public  ArrayList<Product> getProducts() {
@@ -104,7 +104,7 @@ public class WarehouseHibernate  implements WarehouseInterface{
 						product.setName(splitLine[1]);
 						product.setPrice(Integer.parseInt(splitLine[2]));
 						product.setQuantity(Integer.parseInt(splitLine[3]));
-						session.saveOrUpdate(product);
+						session.save(product);
 						tx.commit();
 
 					} catch (RuntimeException e) {

@@ -6,7 +6,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import product.Product;
+import pojoObjects.*;
 
 
 public class AliExpressConfiguration {
@@ -16,7 +16,11 @@ private static SessionFactory sessionFactory;
 		Configuration configuration = new Configuration();
 		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
 		    configuration.getProperties()).build();
-		sessionFactory = configuration.addAnnotatedClass(Product.class).buildSessionFactory(serviceRegistry);
+		sessionFactory = configuration.addAnnotatedClass(Product.class)
+				.addAnnotatedClass(PurchaseOrder.class)
+				.addAnnotatedClass(Card.class)
+				.addAnnotatedClass(Customer.class)
+				.buildSessionFactory(serviceRegistry);
 
 	}
 	

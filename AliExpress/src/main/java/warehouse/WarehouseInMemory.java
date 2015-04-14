@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import product.Product;
+import pojoObjects.Product;
 
 public class WarehouseInMemory implements WarehouseInterface {
 

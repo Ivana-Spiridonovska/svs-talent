@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import product.Product;
+import pojoObjects.Product;
 import connection.AliExpressConnection;
 
 public class WarehouseJdbc implements WarehouseInterface {

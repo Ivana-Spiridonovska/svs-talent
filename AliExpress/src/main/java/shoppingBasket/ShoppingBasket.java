@@ -2,7 +2,7 @@ package shoppingBasket;
 
 import java.util.ArrayList;
 
-import product.Product;
+import pojoObjects.Product;
 
 public class ShoppingBasket {
 
