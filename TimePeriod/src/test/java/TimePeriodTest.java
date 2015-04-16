@@ -122,5 +122,17 @@ public class TimePeriodTest {
 		System.out.println("test-startB equals endA \n");
 		Assert.assertFalse(periodA.overlapsWith(periodB));
 	}
+	
+	@Test
+	public void testStartAEqualsEndB(){
+		TimePeriod periodB = new TimePeriod();                                 
+		Date startDateB = TimePeriod.setDate(25, 11, 2014);                 
+		Date endDateB = TimePeriod.setDate(8, 1, 2015);                   
+		periodB.setStartDate(startDateB); 
+		periodB.setEndDate(endDateB);
+		System.out.println("Period B ==> " + startDateB + " " + endDateB);
+		System.out.println("test-startA equals endB \n");
+		Assert.assertFalse(periodA.overlapsWith(periodB));
+	}
 }                                                                              
                                                                                

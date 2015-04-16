@@ -43,18 +43,6 @@ public class TimePeriod {
 			if (periodA.getStartDate().after(periodB.getEndDate()))
 				overlaps = false;
 			
-			if (periodA.getStartDate().after(periodB.getStartDate())
-					&& periodA.getEndDate().before(periodB.getEndDate()))
-				overlaps = true;
-			
-			if (periodA.getStartDate().before(periodB.getStartDate())
-					&& periodA.getEndDate().after(periodB.getEndDate()))
-				overlaps = true;
-			
-			if (periodB.getStartDate().equals(periodA.getEndDate())
-					&& periodB.getEndDate().after(periodA.getEndDate()))
-				overlaps = false;
-			
 			if (periodA.getStartDate().equals(periodB.getStartDate())
 					&& periodA.getEndDate().equals(periodB.getEndDate()))
 				overlaps = true;	
@@ -65,12 +53,9 @@ public class TimePeriod {
 			
 			if (periodB.getStartDate().after(periodA.getStartDate())
 					&& periodB.getStartDate().before(periodA.getEndDate()))
-				overlaps = true;
-			
-		}
-		
+				overlaps = true;	
+		}	
 		return overlaps;
-
 	}
 
 	public static Date setDate(int day, int month, int year) {
