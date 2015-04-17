@@ -1,59 +1,14 @@
 package app;
 import java.sql.SQLException;
-import java.util.Scanner;
 
-import configuration.LibraryConfiguration;
-import controller.LibraryAppController;
+import controllers.InvalidEmailException;
+import managers.MainMenuManager;
 
 public class LibraryApp {
 
-	public static void main(String[] args) throws SQLException {
-		System.out.println("Welcome to Library!\n");
-		Scanner scanner = new Scanner(System.in);
-		boolean finished = false;
-		LibraryConfiguration.createSessionFactory();
-		LibraryAppController controller = new LibraryAppController();
-
-		while (!finished) {
-			optionMenu();
-			String input = scanner.next();
-			switch (input) {
-			case "1":
-				controller.firstChoice();
-				break;
-			case "2":
-				controller.secondChoice();
-				break;
-			case "3":
-				controller.thirdChoice();
-				break;
-			case "4":
-				controller.fourthChoice();
-				break;
-			case "5":
-				scanner.close();
-				System.out
-						.println("Thank you for your visit! \nVisit Library again!");
-				finished = true;
-				break;
-			default:
-				System.out.println("Invalid option!");
-				System.out.println("You have to enter number from 1 to 5! \n");
-				break;
-			}
-		}
-		LibraryConfiguration.closeSessionFactory();
+	public static void main(String[] args) throws SQLException, InvalidEmailException {
+		MainMenuManager mainMenuManager = MainMenuManager.getInstance(); 
+        mainMenuManager.run(); 
 
 	}
-
-	public static void optionMenu() {
-
-		System.out.println("Choose some of the following options:");
-		System.out.println("1. Register books");
-		System.out.println("2. List register books");
-		System.out.println("3. Update book registation");
-		System.out.println("4. Unregister books");
-		System.out.println("5. Exit");
-	}
-
 }

@@ -6,17 +6,30 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import book.Book;
+import pojoObjectsForHibernate.Book;
+import pojoObjectsForHibernate.Loan;
+import pojoObjectsForHibernate.Magazine;
+import pojoObjectsForHibernate.Member;
+import pojoObjectsForHibernate.Membership;
+import pojoObjectsForHibernate.Publication;
+
 
 public class LibraryConfiguration {
-private static SessionFactory sessionFactory;
+private static SessionFactory sessionFactory = null;
 	
 	public static void createSessionFactory() {
-		Configuration configuration = new Configuration();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-		    configuration.getProperties()).build();
-		sessionFactory = configuration.addAnnotatedClass(Book.class).buildSessionFactory(serviceRegistry);
-
+		if (sessionFactory == null){
+			Configuration configuration = new Configuration();
+			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+			    configuration.getProperties()).build();
+			sessionFactory = configuration.addAnnotatedClass(Member.class)
+					.addAnnotatedClass(Publication.class)
+					.addAnnotatedClass(Book.class)
+					.addAnnotatedClass(Magazine.class)
+					.addAnnotatedClass(Loan.class)
+					.addAnnotatedClass(Membership.class)
+					.buildSessionFactory(serviceRegistry);
+		}	
 	}
 	
 	public static void closeSessionFactory(){
@@ -31,5 +44,4 @@ private static SessionFactory sessionFactory;
 	public static void closeSession(Session session){
 		session.close();
 	}
-
 }
