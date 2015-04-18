@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,10 +23,10 @@ public class Card {
 
 	@Column(name = "type") private String type;
 
-	@ManyToOne(cascade= {CascadeType.ALL}, fetch = FetchType.EAGER)
+	@OneToOne(cascade= {CascadeType.ALL})
 	private Customer customer;
 	
-	@OneToMany(mappedBy = "card", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy = "card", cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
 	private Set<PurchaseOrder> orders;
 
 	public Card() {

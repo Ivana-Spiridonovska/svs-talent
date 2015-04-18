@@ -60,7 +60,7 @@ public class PurchaseOrder {
 		this.customer = customer;
 	}
 
-	public Card getCard() {
+	public Card getCards() {
 		return card;
 	}
 
@@ -74,6 +74,5 @@ public class PurchaseOrder {
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
-	}
-	
+	}	
 }

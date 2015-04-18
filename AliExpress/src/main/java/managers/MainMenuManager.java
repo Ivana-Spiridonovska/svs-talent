@@ -23,7 +23,6 @@ public class MainMenuManager {
 		instance.menu.addOption("Exit");
 		instance.menu.addTail("Enter your option:");
 		return instance;
-
 	}
 
 	public void run() throws SQLException {

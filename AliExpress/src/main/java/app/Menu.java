@@ -52,19 +52,16 @@ public class Menu {
 			else{
 				Reader.println("You have to enter number!");
 				valid = false;
-			}
-			
+			}		
 		}
 
 		if (!valid)
 			return null;
 		else
 			return selection;
-
 	}
 	
 	public boolean isNumeric(String s) {  
 	    return s.matches("[-+]?\\d*\\.?\\d+");  
 	}  
-
 }

@@ -1,7 +1,6 @@
 package app;
 import java.util.Scanner;
 
-
 public class Reader {
 	private static final Scanner input = new Scanner(System.in);
 
@@ -12,9 +11,4 @@ public class Reader {
 	public static String readString(){
 		return input.next();
 	}
-	
-	public static void printf(String s){
-		System.out.printf(s);
-	}
-	
 }

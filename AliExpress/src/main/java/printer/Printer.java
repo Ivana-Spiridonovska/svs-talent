@@ -1,11 +1,15 @@
 package printer;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
+import dataAccess.CustomerDao;
+import app.Reader;
+import pojoObjects.Customer;
 import pojoObjects.Product;
 import shoppingBasket.ShoppingBasket;
-import warehouse.WarehouseInterface;
-import warehouse.WarehouseHibernateDao;
+import dataAccess.WarehouseHibernateDao;
+import warehouse_not_used.WarehouseInterface;
 
 public class Printer {
 
@@ -25,7 +29,7 @@ public class Printer {
 		products = ((WarehouseHibernateDao) warehouse).getProducts();
 		System.out.printf("%s %10s %15s %n", "Key", " Name ", " Price");
 		for (Product product : products) {
-			System.out.println(product.getUniqueKey() + " \t "
+			Reader.println(product.getUniqueKey() + " \t "
 					+ product.getName() + " \t " + product.getPrice());
 		}
 	}
@@ -33,18 +37,26 @@ public class Printer {
 	public static void printBasket(ShoppingBasket basket) {
 		ArrayList<Product> shoppingBasket = basket.getProductBasket();
 		if (shoppingBasket.isEmpty()) {
-			System.out.println("Your basket is empty! \n");
+			Reader.println("Your basket is empty! \n");
 		} else {
 			System.out
 					.printf("%s %15s %15s %n", "Name ", " Price", " Quantity");
 
 			for (Product product : shoppingBasket) {
-				System.out.println(product.getName() + " \t "
+				Reader.println(product.getName() + " \t "
 						+ product.getPrice() + " \t " + " \t "
 						+ product.getQuantity());
 			}
-			System.out.println("\n" + "Total price is: " + basket.totalSum() + "\n");
+			Reader.println("\n" + "Total price is: " + basket.totalSum());
 		}
-
+	}
+	
+	public static void printCustomers(CustomerDao customerDao){
+		List<Customer> customers = customerDao.listCustomers();
+		System.out.printf("%s %10s %10s %n", "ID", "Name", " Email ");
+		for (Customer customer : customers) {
+			Reader.println(customer.getId() + " \t " + customer.getName()
+					+ " \t " + customer.getEmail());
+		}
 	}
 }

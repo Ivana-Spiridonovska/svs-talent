@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,10 +23,10 @@ public class Customer {
 	@Column(name = "email", unique = true) private String email;
 	@Column(name = "password") private String password;
 	
-	@OneToMany(mappedBy = "customer", cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
-	private Set<Card> cards;
+	@OneToOne(mappedBy = "customer", cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
+	private Card card;
 	
-	@OneToMany(mappedBy = "customer", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy = "customer", cascade={CascadeType.ALL}, fetch = FetchType.EAGER)
 	private Set<PurchaseOrder> orders;
 	
 	public Customer(){
@@ -55,13 +56,13 @@ public class Customer {
 	public String getPassword() {
 		return password;
 	}
-	
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+
+	public Card getCard() {
+		return card;
 	}
-	
-	public Set<Card> getCards() {
-		return cards;
+
+	public void setCard(Card card) {
+		this.card = card;
 	}
 
 	public int getId() {

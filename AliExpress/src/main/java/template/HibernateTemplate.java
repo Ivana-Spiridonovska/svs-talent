@@ -19,5 +19,4 @@ public class HibernateTemplate {
 			AliExpressConfiguration.closeSession(session);
 		}
 	}
-
 }

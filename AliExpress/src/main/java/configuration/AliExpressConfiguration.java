@@ -10,18 +10,19 @@ import pojoObjects.*;
 
 
 public class AliExpressConfiguration {
-private static SessionFactory sessionFactory;
+private static SessionFactory sessionFactory = null;
 	
 	public static void createSessionFactory() {
-		Configuration configuration = new Configuration();
-		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
-		    configuration.getProperties()).build();
-		sessionFactory = configuration.addAnnotatedClass(Product.class)
-				.addAnnotatedClass(PurchaseOrder.class)
-				.addAnnotatedClass(Card.class)
-				.addAnnotatedClass(Customer.class)
-				.buildSessionFactory(serviceRegistry);
-
+		if (sessionFactory == null){
+			Configuration configuration = new Configuration();
+			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+			    configuration.getProperties()).build();
+			sessionFactory = configuration.addAnnotatedClass(Product.class)
+					.addAnnotatedClass(PurchaseOrder.class)
+					.addAnnotatedClass(Card.class)
+					.addAnnotatedClass(Customer.class)
+					.buildSessionFactory(serviceRegistry);
+		}
 	}
 	
 	public static void closeSessionFactory(){
@@ -36,5 +37,4 @@ private static SessionFactory sessionFactory;
 	public static void closeSession(Session session){
 		session.close();
 	}
-
 }

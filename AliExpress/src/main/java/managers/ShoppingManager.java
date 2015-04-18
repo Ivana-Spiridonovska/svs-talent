@@ -2,7 +2,7 @@ package managers;
 import java.sql.SQLException;
 
 import app.Menu;
-import controller.ShoppingController;
+import controller.shopping.ShoppingController;
 
 public class ShoppingManager {
 	
@@ -18,13 +18,11 @@ public class ShoppingManager {
 		instance.menu = new Menu();
 		
 		instance.menu.addHeader("\nShopping menu:");
-		instance.menu.addOption("List products");
+		instance.menu.addOption("List of products");
 		instance.menu.addOption("Add product(s) to shopping basket");
 		instance.menu.addOption("Back");
 		instance.menu.addTail("Enter your option:");
 		return instance;
-		
-		
 	}
 	
 	
@@ -44,9 +42,7 @@ public class ShoppingManager {
 				MainMenuManager.getInstance().run();
 				finished = true;
 				break;
-				
 			}
 		}
 	}
-
 }

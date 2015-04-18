@@ -3,7 +3,7 @@ package managers;
 import java.sql.SQLException;
 
 import app.Menu;
-import controller.CustomerController;
+import controller.customer.CustomerController;
 
 public class AccountManager {
 	private static AccountManager instance = new AccountManager();
@@ -21,7 +21,7 @@ public class AccountManager {
 		instance.menu.addOption("Register customer");
 		instance.menu.addOption("List register customers");
 		instance.menu.addOption("Update customer registation");
-		//instance.menu.addOption("Unregister customer");
+		instance.menu.addOption("Unregister customer");
 		instance.menu.addOption("Back");
 		instance.menu.addTail("Enter your option:");
 		return instance;
@@ -43,15 +43,14 @@ public class AccountManager {
 			case "3":
 				controller.updateCustomer();
 				break;
-			/*case "4":
-				controller.unregisterCustomer();
-				break;*/
 			case "4":
+				controller.unregisterCustomer();
+				break;
+			case "5":
 				MainMenuManager.getInstance().run();
 				finished = true;
 				break;
 			}
 		}
 	}
-
 }
